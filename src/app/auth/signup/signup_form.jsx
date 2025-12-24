@@ -28,7 +28,7 @@ export default function SignUpForm() {
             if (d.success) {
                 setSuccess({status: d.success, message: d.message});
                 setTimeout(() => {
-                    router.push(`/auth/email/verify/${data.email}`);
+                    router.push(`/email/verify/${data.email}`);
                 }, 8000);
             } else {
                 setError({

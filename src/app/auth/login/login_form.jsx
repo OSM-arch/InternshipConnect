@@ -1,62 +1,32 @@
 "use client";
-import React from "react";
-import {useRef, useState} from "react";
+import React, {useContext, useState} from "react";
+import {useRef} from "react";
 import {useRouter} from "next/navigation";
 import { Mail, Lock, LockOpen } from "lucide-react";
 import Link from "next/link";
 import {AlertToast, ErrorToast, SuccessToast} from "@/components/toasts";
+import {contextStore} from "@/app/auth/layout";
+import validateForm from "@/functions/validate_form";
 
 export default function LoginForm() {
 
     const router = useRouter();
+    const {states:[isMissing, error, success], sets:[setIsMissing, setError, setSuccess]} = useContext(contextStore);
 
     const emailRef = useRef(null);
     const passwordRef = useRef(null);
 
     const [locked, setLocked] = useState(true);
-    const [isMissing, setIsMissing] = useState({
-        status: false,
-        messages: []
-    });
-    const [error, setError] = useState({
-        status: false,
-        message: ""
-    });
-    const [success, setSuccess] = useState({
-        status: false,
-        message: "Logged in successfully! redirecting..."
-    });
 
-    const login = async (e) => {
-        e.preventDefault();
-        setIsMissing({
-            status: false,
-            messages: []
-        });
-        setError({
-            status: false,
-            message: ""
-        });
-        setSuccess(prev => ({ ...prev, status: false }));
-
+    const login = async () => {
         const email = emailRef.current.value.trim() || null;
         const password = passwordRef.current.value.trim() || null;
-        const messages = [];
 
-        if (!email) {
-            messages.push("Email is messing!");
-        }
-        if (!password) {
-            messages.push("Password is messing!");
-        }
+        const labels = ["Email", "Password"];
+        const array = [email, password];
 
-        if (messages.length > 0) {
-            setIsMissing({
-                status: true,
-                messages: messages
-            });
-            return;
-        }
+        const isValid = validateForm(labels, array, setIsMissing);
+        if (!isValid) return;
 
         try {
             const res = await fetch('/api/auth/login', {
@@ -69,9 +39,8 @@ export default function LoginForm() {
 
             if (data.success) {
                 setSuccess({status: data.success, message: data.message});
-                // redirect to dashboard
                 setTimeout(() => {
-                    router.push("/dashboard");
+                    router.replace("/dashboard");
                 }, 2000);
             } else {
                 setError({
@@ -87,7 +56,7 @@ export default function LoginForm() {
     return (
         <React.Fragment>
 
-            {isMissing.status && <AlertToast setIsMissing={setIsMissing} messages={isMissing.messages} />}
+            {isMissing.status && <AlertToast />}
             {error.status && <ErrorToast />}
             {success.status && <SuccessToast />}
 
@@ -96,7 +65,7 @@ export default function LoginForm() {
                 <p className="text-slate-700  mt-2 text-sm font-medium">Enter your details to access your account</p>
             </div>
 
-            <form className="flex flex-col gap-5" onSubmit={(e) => login(e)}>
+            <div className="flex flex-col gap-5">
                 <div className="flex flex-col gap-2">
                     <label className="text-slate-700 text-sm font-semibold ml-1" htmlFor="email">Email Address</label>
                     <div className="relative flex items-center">
@@ -139,10 +108,11 @@ export default function LoginForm() {
                 rounded-full bg-primary h-12 px-6 text-[#102217] text-base font-bold tracking-wide
                 hover:bg-[#20d86a] hover:shadow-lg hover:shadow-primary/20 transition-all
                 duration-500 ease-in-out active:scale-[0.98]"
+                    onClick={login}
                 >
                     Sign In
                 </button>
-            </form>
+            </div>
 
             <div className="flex items-center justify-center gap-2 pt-2">
                 <p className="text-slate-700 dark:text-[#9db9a8] text-sm font-medium">Don&apos;t have an account?</p>

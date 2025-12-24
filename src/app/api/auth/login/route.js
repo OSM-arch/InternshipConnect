@@ -9,7 +9,7 @@ export async function POST(req) {
         const { email, password } = await req.json();
         const pool = await getDB();
 
-        // 1. Get user by email
+        // Get user by email
         const [rows] = await pool.query('SELECT * FROM users WHERE email = ?', [email]);
 
         if (rows.length === 0) {
@@ -17,22 +17,27 @@ export async function POST(req) {
         }
 
         const user = rows[0];
-        const isValid = password === user.password;
-        // 2. Compare password
-        //  isValid = await bcrypt.compare(password, user.password);
+
+        // Check if verified
+        const isVerified = user.email_verified;
+        if (!isVerified) {
+            return NextResponse.json({ error: 'User not Verified' }, { status: 401 });
+        }
+
+        // Compare password
+        const isValid = await bcrypt.compare(password, user.password);
         if (!isValid) {
             return NextResponse.json({ error: 'Invalid password' }, { status: 401 });
         }
 
-
-        // 3. Generate JWT token
+        // Generate JWT token
         const token = jwt.sign(
             { user_id: user.user_id, email: user.email, role: user.role },
             process.env.JWT_SECRET,
             { expiresIn: '1h' }
         );
 
-        // 4. Return token in httpOnly cookie
+        // Return token in httpOnly cookie
         const response = NextResponse.json({
             success: true,
             user: {

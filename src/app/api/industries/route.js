@@ -6,7 +6,6 @@ export async function GET() {
     try {
 
         const pool = await getDB();
-
         // Get industries
         const [rows] = await pool.query("SELECT * FROM industries");
 

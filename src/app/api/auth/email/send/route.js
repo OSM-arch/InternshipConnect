@@ -40,10 +40,7 @@ export async function POST(req) {
             path: "/",
         });
 
-        await sendVerificationEmail({
-            to: email,
-            code: code
-        });
+        await sendVerificationEmail(email, code);
 
         return response;
     } catch (error) {

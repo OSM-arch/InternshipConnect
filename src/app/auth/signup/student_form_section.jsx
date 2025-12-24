@@ -23,7 +23,7 @@ const fetchGroups = async (school_id, query, setData, setMessage) => {
 };
 
 export default function StudentFormSection({ sign_up }) {
-    const { sets: [setError] } = useContext(contextStore);
+    const { sets: [setIsMissing] } = useContext(contextStore);
 
     const firstnameRef = useRef(null);
     const second_nameRef = useRef(null);
@@ -101,7 +101,7 @@ export default function StudentFormSection({ sign_up }) {
         const labels = ["First name", "Second name", "Email", "Password", "School", "Group"];
         const array = [firstname, second_name, email, password, school_id, group_id];
 
-        const isValid = validateForm(labels, array, setError);
+        const isValid = validateForm(labels, array, setIsMissing);
         if (isValid) sign_up({ firstname, second_name, email, password, school_id, group_id });
     };
 
