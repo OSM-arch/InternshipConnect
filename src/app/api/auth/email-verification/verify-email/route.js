@@ -22,9 +22,7 @@ export async function POST(req) {
 
     try {
         const pool = await getDB();
-        const [rows] = await pool.query("UPDATE users SET email_verified = TRUE WHERE email = ?", [email]);
-
-        console.log(rows);
+        const [rows] = await pool.query("UPDATE users SET email_verified = TRUE WHERE email-verification = ?", [email]);
 
         const res = NextResponse.json({ success: true });
         res.cookies.delete("email_verification_code");
