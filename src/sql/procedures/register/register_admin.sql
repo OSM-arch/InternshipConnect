@@ -12,7 +12,7 @@ COMMENT 'Registers an admin account, and logs the registration.'
 BEGIN
     DECLARE v_user_id CHAR(36);
 
-    -- Handle duplicate email
+    -- Handle duplicate email-verification
     DECLARE EXIT HANDLER FOR 1062
     BEGIN
         ROLLBACK;

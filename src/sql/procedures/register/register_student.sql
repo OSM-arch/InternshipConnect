@@ -13,7 +13,7 @@ COMMENT 'Registers a student account, and logs the registration.'
 BEGIN
     DECLARE v_user_id CHAR(36);
 
-    -- Handle duplicate email error
+    -- Handle duplicate email-verification error
     DECLARE EXIT HANDLER FOR 1062
     BEGIN
         ROLLBACK;

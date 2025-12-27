@@ -11,7 +11,7 @@ export async function POST(request) {
         const { role, data } = await request.json();
         const pool = await getDB();
 
-        // Asynchronous password hashing
+        // Asynchronous forgot-forgot-password hashing
         const hashed_password = await bcrypt.hash(data.password, 10);
 
         const [rows] = await pool.query(sql[role], [

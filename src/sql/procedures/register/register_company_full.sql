@@ -18,7 +18,7 @@ BEGIN
     DECLARE v_user_id CHAR(36);
     DECLARE v_company_id CHAR(36);
 
-	-- Handle duplicate email error
+	-- Handle duplicate email-verification error
     DECLARE EXIT HANDLER FOR 1062
     BEGIN
         ROLLBACK;

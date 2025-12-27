@@ -1,98 +1,67 @@
-export default function PinCodeInput() {
+import {useRef} from "react";
 
-    // use this simple function to automatically focus on the next input
-    function focusNextInput(el, prevId, nextId) {
-        if (el.value.length === 0) {
-            if (prevId) {
-                document.getElementById(prevId).focus();
-            }
-        } else {
-            if (nextId) {
-                document.getElementById(nextId).focus();
-            }
+export default function PinCodeInput({ setCode }) {
+    const inputsRef = useRef([]);
+
+    const handleChange = (e, index) => {
+        const value = e.target.value.replace(/\D/g, "");
+
+        e.target.value = value;
+        setCode(prev => prev += value);
+
+        if (value && index < inputsRef.current.length - 1) {
+            inputsRef.current[index + 1].focus();
         }
-    }
+    };
 
-    document.querySelectorAll('[data-focus-input-init]').forEach(function(element) {
-        element.addEventListener('keyup', function() {
-            const prevId = this.getAttribute('data-focus-input-prev');
-            const nextId = this.getAttribute('data-focus-input-next');
-            focusNextInput(this, prevId, nextId);
+    const handleKeyDown = (e, index) => {
+
+        if (e.key === "Backspace" && index > 0) {
+            setCode("");
+        }
+
+        if (e.key === "Backspace" && !e.target.value && index > 0) {
+            inputsRef.current[index - 1].focus();
+        }
+    };
+
+    const handlePaste = (e) => {
+        e.preventDefault();
+        setCode(e.clipboardData.getData("text"));
+        const digits = e.clipboardData.getData("text").replace(/\D/g, "").slice(0, 6);
+
+        digits.split("").forEach((digit, index) => {
+            if (inputsRef.current[index]) {
+                inputsRef.current[index].value = digit;
+            }
         });
 
-    // Handle paste event to split the pasted code into each input
-        element.addEventListener('paste', function(event) {
-            event.preventDefault();
-            const pasteData = (event.clipboardData || window.clipboardData).getData('text');
-            const digits = pasteData.replace(/\D/g, ''); // Only take numbers from the pasted data
-
-            // Get all input fields
-            const inputs = document.querySelectorAll('[data-focus-input-init]');
-
-            // Iterate over the inputs and assign values from the pasted string
-            inputs.forEach((input, index) => {
-                if (digits[index]) {
-                    input.value = digits[index];
-                    // Focus the next input after filling the current one
-                    const nextId = input.getAttribute('data-focus-input-next');
-                    if (nextId) {
-                        document.getElementById(nextId).focus();
-                    }
-                }
-            });
-        });
-    });
+        const nextIndex = Math.min(digits.length, 5);
+        inputsRef.current[nextIndex]?.focus();
+    };
 
     return (
-        <>
-            <form className="max-w-sm mx-auto">
-                <div className="flex mb-2 space-x-2 rtl:space-x-reverse">
-                    <div>
-                        <label htmlFor="code-1" className="sr-only">First code</label>
-                        <input type="text" maxLength="1" data-focus-input-init data-focus-input-next="code-2"
-                               id="code-1"
-                               className="block text-center text-lg bg-neutral-secondary-medium border border-default-medium text-heading rounded-base focus:ring-brand focus:border-brand h-10 w-10 shadow-xs placeholder:text-body"
-                               required/>
-                    </div>
-                    <div>
-                        <label htmlFor="code-2" className="sr-only">Second code</label>
-                        <input type="text" maxLength="1" data-focus-input-init data-focus-input-prev="code-1"
-                               data-focus-input-next="code-3" id="code-2"
-                               className="block text-center text-lg bg-neutral-secondary-medium border border-default-medium text-heading rounded-base focus:ring-brand focus:border-brand h-10 w-10 shadow-xs placeholder:text-body"
-                               required/>
-                    </div>
-                    <div>
-                        <label htmlFor="code-3" className="sr-only">Third code</label>
-                        <input type="text" maxLength="1" data-focus-input-init data-focus-input-prev="code-2"
-                               data-focus-input-next="code-4" id="code-3"
-                               className="block text-center text-lg bg-neutral-secondary-medium border border-default-medium text-heading rounded-base focus:ring-brand focus:border-brand h-10 w-10 shadow-xs placeholder:text-body"
-                               required/>
-                    </div>
-                    <div>
-                        <label htmlFor="code-4" className="sr-only">Fourth code</label>
-                        <input type="text" maxLength="1" data-focus-input-init data-focus-input-prev="code-3"
-                               data-focus-input-next="code-5" id="code-4"
-                               className="block text-center text-lg bg-neutral-secondary-medium border border-default-medium text-heading rounded-base focus:ring-brand focus:border-brand h-10 w-10 shadow-xs placeholder:text-body"
-                               required/>
-                    </div>
-                    <div>
-                        <label htmlFor="code-5" className="sr-only">Fifth code</label>
-                        <input type="text" maxLength="1" data-focus-input-init data-focus-input-prev="code-4"
-                               data-focus-input-next="code-6" id="code-5"
-                               className="block text-center text-lg bg-neutral-secondary-medium border border-default-medium text-heading rounded-base focus:ring-brand focus:border-brand h-10 w-10 shadow-xs placeholder:text-body"
-                               required/>
-                    </div>
-                    <div>
-                        <label htmlFor="code-6" className="sr-only">Sixth code</label>
-                        <input type="text" maxLength="1" data-focus-input-init data-focus-input-prev="code-5"
-                               id="code-6"
-                               className="block text-center text-lg bg-neutral-secondary-medium border border-default-medium text-heading rounded-base focus:ring-brand focus:border-brand h-10 w-10 shadow-xs placeholder:text-body"
-                               required/>
-                    </div>
-                </div>
-                <p id="helper-text-explanation" className="mt-2.5 text-sm text-body">Please introduce the 6 digit code
-                    we sent via email.</p>
-            </form>
-        </>
-    )
+        <div className="max-w-sm mx-auto">
+            <div className="flex justify-self-center mb-2 space-x-2">
+                {Array.from({ length: 6 }).map((_, index) => (
+                    <input
+                        key={index}
+                        ref={(el) => (inputsRef.current[index] = el)}
+                        type="text"
+                        maxLength={1}
+                        className="block text-center text-lg bg-neutral-secondary-medium border border-default-medium text-heading rounded-base focus:ring-brand focus:border-brand h-10 w-10 shadow-xs"
+                        onChange={(e) => handleChange(e, index)}
+                        onKeyDown={(e) => handleKeyDown(e, index)}
+                        onPaste={handlePaste}
+                        inputMode="numeric"
+                        required
+                    />
+                ))}
+            </div>
+
+            <p className="mt-2.5 text-sm text-body">
+                Please introduce the 6 digit code we sent via email.
+            </p>
+        </div>
+    );
 }

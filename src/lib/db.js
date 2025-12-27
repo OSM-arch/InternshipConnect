@@ -12,7 +12,7 @@ export async function getDB() {
         database: process.env.DB_NAME,
         port: process.env.DB_PORT,
         waitForConnections: true,
-        connectionLimit: 3,
+        connectionLimit: 5,
         queueLimit: 0,
         ssl: { rejectUnauthorized: false }
     });
