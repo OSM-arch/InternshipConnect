@@ -1,8 +1,8 @@
 "use client";
 import React, {useContext, useState} from "react";
 import Link from "next/link";
-import RoleRadio from "@/app/auth/signup/roleRadio";
-import StudentFormSection from "@/app/auth/signup/student_form_section";
+import RoleRadio from "@/app/auth/signup/components/roleRadio";
+import StudentFormSection from "@/app/auth/signup/(components)/student_form_section";
 import {contextStore} from "@/app/auth/layout";
 import {useRouter} from "next/navigation";
 
