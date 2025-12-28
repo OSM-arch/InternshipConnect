@@ -12,27 +12,38 @@ BEGIN
     DECLARE v_user_id CHAR(36) DEFAULT (UUID());
     DECLARE v_school_id CHAR(36) DEFAULT (UUID());
     DECLARE v_new_key VARCHAR(20) DEFAULT '';
-    DECLARE characters CHAR(36) DEFAULT 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-    DECLARE i INT DEFAULT 0;
+	DECLARE characters CHAR(36) DEFAULT 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+	DECLARE i INT DEFAULT 1;
 
-    -- Generate registration key (XXXX-XXXX)
-    WHILE i < 8 DO
-        SET v_new_key = CONCAT(
-            v_new_key,
-            SUBSTRING(characters, FLOOR(1 + RAND() * 36), 1)
-        );
-        SET i = i + 1;
-        IF i = 4 THEN
-            SET v_new_key = CONCAT(v_new_key, '-');
-        END IF;
-    END WHILE;
+    -- Handle duplicate email
+    DECLARE EXIT HANDLER FOR 1062
+    BEGIN
+        ROLLBACK;
+        SIGNAL SQLSTATE '45000'
+            SET MESSAGE_TEXT = 'Email already registered';
+    END;
 
-    -- Create admin user
+    START TRANSACTION;
+
+	SET v_new_key = 'SCH-';
+
+	WHILE i <= 8 DO
+		SET v_new_key = CONCAT(
+			v_new_key,
+			SUBSTRING(characters, FLOOR(1 + RAND() * 36), 1)
+		);
+		IF i = 4 THEN
+			SET v_new_key = CONCAT(v_new_key, '-');
+		END IF;
+		SET i = i + 1;
+	END WHILE;
+
+    -- Create user
     INSERT INTO users (user_id, first_name, second_name, email, password, role)
-    VALUES (v_user_id, p_first_name, p_last_name, p_email, p_password, 'admin');
+    VALUES (v_user_id, p_first_name, p_last_name, p_email, p_password, 'school');
 
     -- Create school
-    INSERT INTO schools (school_id, admin_id, school_name, registration_key, address)
+    INSERT INTO schools (school_id, user_id, school_name, registration_key, address)
     VALUES (v_school_id, v_user_id, p_school_name, v_new_key, p_address);
 
     -- Log the registration
@@ -43,6 +54,6 @@ BEGIN
         CONCAT('School registered: ', p_school_name, ' | Registration Key: ', v_new_key)
     );
 
+    COMMIT;
 END //
-
 DELIMITER ;

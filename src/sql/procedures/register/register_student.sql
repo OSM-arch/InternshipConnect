@@ -6,8 +6,7 @@ CREATE PROCEDURE register_student (
     IN p_second_name VARCHAR(50),
     IN p_email VARCHAR(100),
     IN p_password VARCHAR(255),
-    IN p_school_id CHAR(36), 
-    IN p_group_id CHAR(36)
+    IN p_school_id CHAR(36)
 )
 COMMENT 'Registers a student account, and logs the registration.'
 BEGIN
@@ -20,6 +19,14 @@ BEGIN
         SIGNAL SQLSTATE '45000'
             SET MESSAGE_TEXT = 'Email already registered';
     END;
+    
+    -- Handle school not exists
+    IF NOT EXISTS (
+		SELECT 1 FROM schools WHERE school_id = p_school_id
+	) THEN
+		SIGNAL SQLSTATE '45000'
+			SET MESSAGE_TEXT = 'Invalid school ID';
+	END IF;
 
     START TRANSACTION;
 		-- insert user to users table 
@@ -32,7 +39,7 @@ BEGIN
 		LIMIT 1;
         
         -- insert to students table
-        INSERT INTO students (user_id, school_id, group_id) VALUES (v_user_id, p_school_id, p_group_id);
+        INSERT INTO students (user_id, school_id) VALUES (v_user_id, p_school_id);
 
 		-- insert log to system logs table 
 		INSERT INTO system_logs (action_type, performed_by, action_details)

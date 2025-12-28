@@ -1,7 +1,6 @@
 import { Mail, Lock, LockOpen, Building2, ChevronDown, Users } from "lucide-react";
-import React, { useContext, useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import validateForm from "@/functions/validate_form";
-import {contextStore} from "@/app/auth/layout";
 
 const fetchSchools = async (query, setData, setMessage) => {
     try {
@@ -22,8 +21,7 @@ const fetchGroups = async (school_id, query, setData, setMessage) => {
     } catch (err) { console.error(err); }
 };
 
-export default function StudentFormSection({ sign_up }) {
-    const { sets: [setIsMissing] } = useContext(contextStore);
+export default function StudentForm({ sign_up }) {
 
     const firstnameRef = useRef(null);
     const second_nameRef = useRef(null);

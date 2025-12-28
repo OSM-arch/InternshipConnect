@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import bcrypt from 'bcryptjs';
 import { getDB } from '@/lib/db';
 import {SignJWT} from "jose";
+import {verify} from "jsonwebtoken";
 
 const secret = new TextEncoder().encode(process.env.JWT_SECRET);
 
@@ -14,11 +15,12 @@ export async function POST(req) {
         // Get user by email-verification
         const [rows] = await pool.query('SELECT * FROM users WHERE email = ?', [email]);
 
-        if (rows.length === 0) {
+        const user = rows[0] || null;
+
+        // Check if user exists
+        if (!user) {
             return NextResponse.json({ error: 'User not found' }, { status: 401 });
         }
-
-        const user = rows[0];
 
         // Check if verified
         const isVerified = user.email_verified;
@@ -30,6 +32,18 @@ export async function POST(req) {
         const isValid = await bcrypt.compare(password, user.password);
         if (!isValid) {
             return NextResponse.json({ error: 'Password incorrect' }, { status: 401 });
+        }
+
+        // Check if school verified if role = 'school'
+        if (user.role === 'school') {
+            const [schoolRows] = await pool.query('SELECT verified FROM schools WHERE user_id = ?', [user.user_id]);
+
+            if (!schoolRows[0] || !schoolRows[0].verified) {
+                return NextResponse.json(
+                    { error: "Your school account is not yet verified by an admin. Please wait for approval." },
+                    { status: 401 }
+                );
+            }
         }
 
         // Generate JWT token

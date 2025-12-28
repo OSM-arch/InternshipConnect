@@ -6,7 +6,9 @@ CREATE PROCEDURE register_supervisor (
     IN p_first_name VARCHAR(50),
     IN p_second_name VARCHAR(50),
     IN p_email VARCHAR(100),
-    IN p_password VARCHAR(255)
+    IN p_password VARCHAR(255),
+    IN p_school_id CHAR(36),
+    IN p_sch_key VARCHAR(20)
 )
 COMMENT 'Registers a supervisor account, and logs the registration.'
 BEGIN
@@ -19,9 +21,21 @@ BEGIN
         SIGNAL SQLSTATE '45000'
             SET MESSAGE_TEXT = 'Email already registered';
     END;
+    
+    -- Check if school exists, is verified, and key is correct
+    IF NOT EXISTS (
+        SELECT 1 
+        FROM schools 
+        WHERE school_id = p_school_id 
+          AND verified = TRUE
+          AND registration_key = p_sch_key
+    ) THEN
+        SIGNAL SQLSTATE '45000'
+            SET MESSAGE_TEXT = 'Invalid school ID, unverified school, or incorrect registration key';
+    END IF;
 
     START TRANSACTION;
-		-- Insert supervisor user
+		-- Insert user
 		INSERT INTO users (first_name, second_name, email, password, role)
 		VALUES (p_first_name, p_second_name, p_email, p_password, 'supervisor');
 
@@ -29,6 +43,9 @@ BEGIN
 		FROM users
 		WHERE email = p_email
 		LIMIT 1;
+        
+        -- Insert Supervisor
+        INSERT INTO supervisors (user_id, school_id) VALUES (v_user_id, p_school_id);
 
 		-- Log the registration
 		INSERT INTO system_logs (action_type, performed_by, action_details)

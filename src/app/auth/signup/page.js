@@ -3,23 +3,15 @@ import Logo from "@/components/logo";
 import {useFormStatus} from "react-dom";
 import {Spinner} from "@/components/ui/spinner";
 import React, {useState} from "react";
-import {useRouter} from "next/navigation";
 import Link from "next/link";
 import RoleRadio from "@/app/auth/signup/(components)/roleRadio";
+import CompanyForm from "@/app/auth/signup/(components)/(forms)/company";
+import StudentForm from "@/app/auth/signup/(components)/(forms)/student";
+import SupervisorForm from "@/app/auth/signup/(components)/(forms)/supervisor";
+import SchoolForm from "@/app/auth/signup/(components)/(forms)/school";
 
 export default function SignupPage() {
-
-    const router = useRouter();
-
-    const [role, setRole] = useState("student");
-
-    const handleChange = () => {
-
-    }
-
-    const handleSubmit = async () => {
-
-    }
+    const [role, setRole] = useState("");
 
     return (
         <div className="flex flex-row justify-center items-center w-full min-h-screen py-6">
@@ -36,27 +28,28 @@ export default function SignupPage() {
                         {/* !--Header-- */}
                         <div className="mb-8 text-center">
                             <h1 className="text-2xl font-bold tracking-tight text-blue-200 mb-2">
-                                Sign in
+                                Sign up
                             </h1>
                             <p className="text-slate-500 text-sm leading-relaxed">
-                                Enter your details to access your account.
+                                Enter your details to create an account.
                             </p>
                         </div>
 
                         <RoleRadio setRole={setRole} />
 
-                        <form className="flex flex-col gap-5" action={handleSubmit} onChange={handleChange}>
-
-                            {/* !--Submit Button -- */}
-                            <SubmitButton />
-                        </form>
+                        <div>
+                            {role === "Student" && <StudentForm />}
+                            {role === "Company" && <CompanyForm />}
+                            {role === "Supervisor" && <SupervisorForm />}
+                            {role === "School" && <SchoolForm />}
+                        </div>
                         <div className="flex items-center justify-center gap-2 pt-4">
-                            <p className="text-slate-700 dark:text-[#9db9a8] text-sm">Don&apos;t have an account?</p>
+                            <p className="text-slate-700 dark:text-[#9db9a8] text-sm">Already have an account?</p>
                             <Link className="cursor-pointer text-sm font-medium text-slate-300 hover:text-slate-500
                                             transition-all duration-200"
-                                  href="/auth/signup"
+                                  href="/auth/login"
                             >
-                                Sign Up
+                                Sign In
                             </Link>
                         </div>
                     </div>

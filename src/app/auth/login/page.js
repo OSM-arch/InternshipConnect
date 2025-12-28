@@ -67,7 +67,7 @@ export default function LoginPage() {
                 setError(data.error === dbError ? "Something went wrong! please try again.": data.error);
                 if (data.error === verifiedErr) {
                     setError(verifiedErr);
-                    setTimeout(() => router.push("/email-verification"), 1000);
+                    setTimeout(() => router.push("/email-verification"), 2000);
                 }
             }
         } catch (err) {

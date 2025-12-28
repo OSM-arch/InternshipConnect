@@ -5,7 +5,8 @@ CREATE TABLE users (
     second_name VARCHAR(50) NOT NULL,
     email VARCHAR(100) UNIQUE NOT NULL,
     password VARCHAR(255) NOT NULL,
-    role ENUM('student', 'enterprise', 'supervisor', 'admin') NOT NULL,
+    role ENUM('student', 'company', 'supervisor', 'school') NOT NULL,
+    email_verified BOOLEAN DEFAULT FALSE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -17,7 +18,7 @@ CREATE TABLE industries (
 -- 2. Tables depending only on 'users'
 CREATE TABLE schools (
     school_id CHAR(36) PRIMARY KEY DEFAULT (UUID()),
-    admin_id CHAR(36),
+    user_id CHAR(36),
     school_name VARCHAR(150) NOT NULL,
     registration_key VARCHAR(20) UNIQUE NOT NULL,
     address TEXT,
@@ -27,9 +28,15 @@ CREATE TABLE schools (
 CREATE TABLE companies (
     company_id CHAR(36) PRIMARY KEY DEFAULT (UUID()),
     user_id CHAR(36) NOT NULL,
+    industry_id INT NULL,
     company_name VARCHAR(100) UNIQUE NOT NULL,
     address TEXT NOT NULL,
-    FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE ON UPDATE CASCADE
+    description TEXT NULL,
+    linkedin_url VARCHAR(255) NULL,
+    logo_url VARCHAR(255) NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE ON UPDATE CASCADE,
+	FOREIGN KEY (industry_id) REFERENCES industries(industry_id) ON DELETE SET NULL ON UPDATE CASCADE
 );
 
 CREATE TABLE supervisors (
