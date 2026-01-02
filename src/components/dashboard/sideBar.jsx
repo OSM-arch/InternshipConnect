@@ -24,8 +24,7 @@ export default function SideBar() {
         student: [
             {icon: <Search size={20} />, display: "Search Offers", path: "/dashboard/search-offers"},
             {icon: <BriefcaseBusiness size={20} />, display: "My Applications", path: "/dashboard/my-applications"},
-            {icon: <Bookmark size={20} />, display: "Saved Jobs", path: "/dashboard/saved-jobs"},
-            {icon: <MessageSquareText size={20} />, display: "Messages", path: "/dashboard/messages"}
+            {icon: <Bookmark size={20} />, display: "Saved Offers", path: "/dashboard/saved-offers"}
         ]
     };
 

@@ -73,8 +73,7 @@ export default function ProfilePage() {
     }
 
     return (
-        <div
-            className="flex-1 flex flex-col w-full bg-background-dark overflow-y-auto p-4 md:p-8">
+        <div className="flex-1 flex flex-col w-full overflow-y-auto p-4 md:p-8">
             <div className="w-full flex flex-col gap-6">
                 {/* !--Page Heading -- */}
                 <div className="flex flex-col gap-1">
