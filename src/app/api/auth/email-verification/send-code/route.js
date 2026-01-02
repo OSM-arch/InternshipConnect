@@ -1,6 +1,6 @@
 import {NextResponse} from "next/server";
 import {getDB} from "@/lib/db";
-import generateVerificationCode from "@/functions/generate_verification_code";
+import generateVerificationCode from "@/utils/generate_verification_code";
 import nodemailer from "nodemailer";
 
 export async function POST(req) {

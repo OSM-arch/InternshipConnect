@@ -6,6 +6,7 @@ CREATE TABLE users (
     email VARCHAR(100) UNIQUE NOT NULL,
     password VARCHAR(255) NOT NULL,
     role ENUM('student', 'company', 'supervisor', 'school') NOT NULL,
+    profile_image_url VARCHAR(255),
     email_verified BOOLEAN DEFAULT FALSE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
@@ -22,7 +23,8 @@ CREATE TABLE schools (
     school_name VARCHAR(150) NOT NULL,
     registration_key VARCHAR(20) UNIQUE NOT NULL,
     address TEXT,
-    FOREIGN KEY (admin_id) REFERENCES users(user_id) ON DELETE SET NULL
+    verified BOOLEAN DEFAULT FALSE,
+    FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE SET NULL
 );
 
 CREATE TABLE companies (
@@ -31,6 +33,7 @@ CREATE TABLE companies (
     industry_id INT NULL,
     company_name VARCHAR(100) UNIQUE NOT NULL,
     address TEXT NOT NULL,
+    size INT,
     description TEXT NULL,
     linkedin_url VARCHAR(255) NULL,
     logo_url VARCHAR(255) NULL,
@@ -83,11 +86,14 @@ CREATE TABLE internship_offers (
     company_id CHAR(36) NOT NULL,
     title VARCHAR(100) NOT NULL,
     description TEXT NOT NULL,
-    required_skills TEXT NOT NULL,
+    required_skills JSON NOT NULL,
+    salary DECIMAL(10,2) DEFAULT 0,
+    languages JSON,
     location VARCHAR(50),
     expiration_date DATE,
     available_slots INT DEFAULT 1,
     status ENUM('open','closed') DEFAULT 'open',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (company_id) REFERENCES companies(company_id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
@@ -98,7 +104,6 @@ CREATE TABLE applications (
     offer_id CHAR(36) NOT NULL,
     apply_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     status ENUM('pending', 'accepted', 'rejected') DEFAULT 'pending',
-    cv_url VARCHAR(255) NOT NULL,
     FOREIGN KEY (student_id) REFERENCES students(student_id) ON DELETE CASCADE ON UPDATE CASCADE,
     FOREIGN KEY (offer_id) REFERENCES internship_offers(offer_id) ON DELETE CASCADE ON UPDATE CASCADE
 );
@@ -112,6 +117,14 @@ CREATE TABLE internships (
     internship_status ENUM('ongoing', 'completed', 'cancelled') DEFAULT 'ongoing',
     FOREIGN KEY (supervisor_id) REFERENCES supervisors(supervisor_id) ON DELETE CASCADE ON UPDATE CASCADE,
     FOREIGN KEY (application_id) REFERENCES applications(application_id) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+CREATE TABLE saved_offers (
+	id INT PRIMARY KEY AUTO_INCREMENT,
+    user_id CHAR(36),
+    offer_id CHAR(36),
+    FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (offer_id) REFERENCES internship_offers(offer_id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 -- 6. Final Detail Tables

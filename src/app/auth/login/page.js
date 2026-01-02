@@ -104,7 +104,7 @@ export default function LoginPage() {
                         <form className="flex flex-col gap-5" action={handleSubmit} onChange={handleChange}>
                             {/* !--Email Field -- */}
                             <div className="flex flex-col gap-1.5">
-                                <label className="text-sm font-medium text-slate-700 dark:text-slate-300">
+                                <label className="text-sm font-medium text-slate-300">
                                     Email Address
                                 </label>
                                 <div
@@ -128,7 +128,7 @@ export default function LoginPage() {
                             {/* !--Password Field -- */}
                             <div className="flex flex-col gap-1.5">
                                 <div className="flex justify-between items-center ml-1">
-                                    <label className="text-sm font-medium text-slate-700 dark:text-slate-300">
+                                    <label className="text-sm font-medium text-slate-300">
                                         Password
                                     </label>
                                     <Link className="cursor-pointer text-sm font-medium text-slate-300 hover:text-slate-500
@@ -167,7 +167,7 @@ export default function LoginPage() {
                             <SubmitButton />
                         </form>
                         <div className="flex items-center justify-center gap-2 pt-4">
-                            <p className="text-slate-700 dark:text-[#9db9a8] text-sm">Don&apos;t have an account?</p>
+                            <p className="text-[#9db9a8] text-sm">Don&apos;t have an account?</p>
                             <Link className="cursor-pointer text-sm font-medium text-slate-300 hover:text-slate-500
                                             transition-all duration-200"
                                   href="/auth/signup"
@@ -179,11 +179,11 @@ export default function LoginPage() {
                 </div>
                 {/* !--Help / Support Links -- */}
                 <div className="flex justify-center gap-6 text-xs text-slate-500 dark:text-slate-600">
-                    <a className="hover:text-slate-800 dark:hover:text-slate-400 transition-colors" href="#">Contact
+                    <a className="hover:text-slate-400 transition-colors" href="#">Contact
                         Support</a>
-                    <a className="hover:text-slate-800 dark:hover:text-slate-400 transition-colors" href="#">Privacy
+                    <a className="hover:text-slate-400 transition-colors" href="#">Privacy
                         Policy</a>
-                    <a className="hover:text-slate-800 dark:hover:text-slate-400 transition-colors" href="#">Terms</a>
+                    <a className="hover:text-slate-400 transition-colors" href="#">Terms</a>
                 </div>
             </div>
         </div>

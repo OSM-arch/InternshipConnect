@@ -6,7 +6,7 @@ import {useRef, useState} from "react";
 import {useFormStatus} from "react-dom";
 import {Spinner} from "@/components/ui/spinner";
 import {useRouter} from "next/navigation";
-import {validatePassword} from "@/functions/validatePassword";
+import {validatePassword} from "@/utils/validatePassword";
 
 export default function ResetPasswordPage() {
 

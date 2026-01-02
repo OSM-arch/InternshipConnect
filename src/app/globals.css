@@ -74,10 +74,11 @@
         border: 0;
         margin: .4rem 0;
         box-shadow: 0 0 5px rgba(0, 0, 0, .15);
+        @apply rounded
     }
 
     option {
-        @apply bg-slate-950 text-white/80 hover:bg-slate-700;
+        @apply bg-transparent text-white/80 hover:bg-slate-700 px-1;
     }
 }
 

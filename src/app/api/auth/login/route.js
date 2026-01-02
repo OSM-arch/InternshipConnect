@@ -2,7 +2,6 @@ import { NextResponse } from 'next/server';
 import bcrypt from 'bcryptjs';
 import { getDB } from '@/lib/db';
 import {SignJWT} from "jose";
-import {verify} from "jsonwebtoken";
 
 const secret = new TextEncoder().encode(process.env.JWT_SECRET);
 
@@ -48,8 +47,8 @@ export async function POST(req) {
 
         // Generate JWT token
         const token = await new SignJWT({
-            user_id: user.user_id,
-            role: user.role
+            role: user.role,
+            user_id: user.user_id
         })
             .setProtectedHeader({ alg: "HS256" })
             .setIssuedAt()
@@ -57,10 +56,7 @@ export async function POST(req) {
             .sign(secret);
 
         // Return token in httpOnly cookie
-        const response = NextResponse.json({
-            success: true,
-            user: user,
-        });
+        const response = NextResponse.json({success: true});
 
         response.cookies.set("token", token, {
             httpOnly: true,

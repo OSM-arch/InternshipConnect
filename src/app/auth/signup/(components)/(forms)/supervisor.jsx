@@ -3,7 +3,7 @@ import {Mail, Lock, Building2, Eye, EyeOff, Info, KeyRound} from "lucide-react";
 import React, { useState } from "react";
 import {SubmitButton} from "@/app/auth/signup/page";
 import Alert from "@/components/alert";
-import {validatePassword} from "@/functions/validatePassword";
+import {validatePassword} from "@/utils/validatePassword";
 import {useRouter} from "next/navigation";
 import Success from "@/components/success";
 

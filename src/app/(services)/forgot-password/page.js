@@ -185,7 +185,7 @@ export default function ForgotPage() {
                             <span className="text-[16px]">
                                 <ArrowLeft />
                             </span>
-                            Back to Login
+                            Back
                         </Link>
                     </div>
                 </div>
