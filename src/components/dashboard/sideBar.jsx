@@ -13,12 +13,16 @@ import Link from "next/link";
 import clsx from "clsx";
 import {useState} from "react";
 import {useAuth} from "@/context/authContext";
+import {Spinner} from "@/components/ui/spinner";
+import {useRouter} from "next/navigation";
 
 export default function SideBar() {
 
     const { role } = useAuth();
+    const router = useRouter();
 
     const [collapsed, setCollapsed] = useState(false);
+    const [loading, setLoading] = useState(false);
 
     const navigation = {
         student: [
@@ -27,6 +31,25 @@ export default function SideBar() {
             {icon: <Bookmark size={20} />, display: "Saved Offers", path: "/dashboard/saved-offers"}
         ]
     };
+
+    const handleLogout = async () => {
+        try {
+            setLoading(true);
+
+            await fetch("/api/auth/logout", {
+                method: "GET",
+                credentials: "include",
+            });
+
+            router.refresh();
+
+        } catch (error) {
+            console.error("Logout failed:", error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
 
     return (
         <aside
@@ -93,9 +116,21 @@ export default function SideBar() {
 
             {/* Bottom */}
             <div className="fixed bottom-4 px-3">
-                <button className="flex items-center gap-3 p-2 w-full text-white rounded-lg hover:bg-red-700/20">
-                    <LogOut size={20} />
-                    {!collapsed && <span>Log Out</span>}
+                <button
+                    onClick={handleLogout}
+                    disabled={loading}
+                    className="flex items-center gap-3 p-2 w-full text-white rounded-lg hover:bg-red-700/20">
+                    {
+                        loading ? <>
+                                {!collapsed && <span>Logging out</span>}
+                                <Spinner size={20} />
+                            </>
+                            :
+                            <>
+                                <LogOut size={20} />
+                                {!collapsed && <span>Log Out</span>}
+                            </>
+                    }
                 </button>
 
                 <div className="mt-4 flex items-center gap-3 text-white">

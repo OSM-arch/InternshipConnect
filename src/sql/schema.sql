@@ -114,6 +114,7 @@ CREATE TABLE internships (
     supervisor_id CHAR(36) NOT NULL,
     start_date DATE NOT NULL,
     end_date DATE NOT NULL,
+    report_url VARCHAR(255),
     internship_status ENUM('ongoing', 'completed', 'cancelled') DEFAULT 'ongoing',
     FOREIGN KEY (supervisor_id) REFERENCES supervisors(supervisor_id) ON DELETE CASCADE ON UPDATE CASCADE,
     FOREIGN KEY (application_id) REFERENCES applications(application_id) ON DELETE CASCADE ON UPDATE CASCADE

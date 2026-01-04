@@ -5,5 +5,8 @@ BEGIN
 	IF (SELECT count(*) FROM applications WHERE student_id = NEW.student_id AND offer_id = NEW.offer_id > 0) THEN
 		SIGNAL SQLSTATE "45000" SET MESSAGE_TEXT = "you’ve already submitted an application for this offer.";
 	END IF;
+    IF (SELECT count(*) FROM applications WHERE student_id = NEW.student_id AND status = "accepted" > 0) THEN
+		SIGNAL SQLSTATE "45000" SET MESSAGE_TEXT = "you're currently on an internship.";
+	END IF;
 END //
 DELIMITER ;

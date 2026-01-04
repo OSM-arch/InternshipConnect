@@ -10,6 +10,7 @@ export default function CancelApplicationButton({application_id, large = false})
     const [loading, setLoading] = useState(false);
 
     const handleCancelApp = async () => {
+        if (application_id === ".") return;
         setLoading(true);
         try {
 

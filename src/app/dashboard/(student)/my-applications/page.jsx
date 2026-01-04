@@ -75,7 +75,7 @@ export default async function MyApplicationsPage() {
     )
 }
 
-function Row({data}) {
+export function Row({data}) {
     const {
         application_id,
         title,
@@ -143,7 +143,9 @@ function Row({data}) {
                 }
             </td>
             <td className="px-6 py-4 text-right">
-                <CancelApplicationButton application_id={application_id} large={true} />
+                {
+                    status === "accepted" ? <CancelApplicationButton application_id={"."} large={true} /> : <CancelApplicationButton application_id={application_id} large={true} />
+                }
             </td>
         </tr>
     )
