@@ -20,7 +20,6 @@ export default async function StudentPage() {
     }
 
     const {user, stats, latestApplications, currentInternship} = data.data;
-    console.log(data.data);
 
     return (
         <div className="flex flex-col gap-4 mt-4 px-6">
@@ -29,11 +28,11 @@ export default async function StudentPage() {
                     <div>
                         <h2 className="text-3xl font-bold text-white mb-2">Welcome back, {user.firstName} {user.lastName}</h2>
                         <p className="text-gray-500 text-sm">
-                            You have 2 upcoming interviews this week. Good luck!
+                            Good luck!
                         </p>
                     </div>
                     <div className="flex gap-3">
-                        <Link href="/dashboard/search-offers"
+                        <Link href="/dashboard/student/search-offers"
                               className="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg text-sm font-medium transition-colors shadow-md shadow-blue-500/30 flex items-center gap-2">
                             <Search size={16} />
                             Browse New Offers
@@ -130,7 +129,7 @@ export default async function StudentPage() {
                                 <div className="flex flex-col justify-center items-center gap-2">
                                     <div className="text-white text-sm"><SearchX size={50} /></div>
                                     <div className="text-xs text-gray-500">You don’t have an active internship at the moment.</div>
-                                    <Link href="/dashboard/search-offers" className="text-sm py-1 text-blue-500 hover:underline">Browse internships</Link>
+                                    <Link href="/dashboard/student/search-offers" className="text-sm py-1 text-blue-500 hover:underline">Browse internships</Link>
                                 </div>
                         }
 
@@ -143,7 +142,7 @@ export default async function StudentPage() {
                             Latest Applications
                         </h2>
                         <div className="flex gap-2">
-                            <Link href="/dashboard/my-applications" className="text-sm text-blue-500 font-medium hover:underline">View All</Link>
+                            <Link href="/dashboard/student/my-applications" className="text-sm text-blue-500 font-medium hover:underline">View All</Link>
                         </div>
                     </div>
                     <div className="rounded-xl border border-gray-500 p-6 shadow-sm">
@@ -171,7 +170,7 @@ export default async function StudentPage() {
                                 <div className="flex flex-col justify-center items-center gap-2">
                                     <div className="text-white text-sm"><SearchX size={50} /></div>
                                     <div className="text-xs text-gray-500">You haven’t submitted any active applications yet.</div>
-                                    <Link href="/dashboard/search-offers" className="text-sm py-1 text-blue-500 hover:underline">Browse internships</Link>
+                                    <Link href="/dashboard/student/search-offers" className="text-sm py-1 text-blue-500 hover:underline">Browse internships</Link>
                                 </div>
                         }
                     </div>
@@ -196,7 +195,7 @@ export function Row({data}) {
         <tr className="group transition-colors hover:bg-slate-800/50">
             <td className="px-6 py-4">
                 <div className="flex items-center gap-3">
-                    <div className="flex size-10 shrink-0 items-center justify-center rounded-md bg-indigo-900/30">
+                    <div className="flex size-10 shrink-0 items-center overflow-hidden justify-center rounded-md bg-indigo-900/30">
                         <span className="text-indigo-400">
                             <img src={company.logo ? company.logo : "/vector.png"}
                                  alt="company logo"
@@ -205,7 +204,7 @@ export function Row({data}) {
                     </div>
                     <div>
                         <div className="font-semibold text-white">
-                            <Link href={`/dashboard/search-offers/${offerId}`} className="hover:text-blue-500 hover:underline">
+                            <Link href={`/dashboard/student/search-offers/${offerId}`} className="hover:text-blue-500 hover:underline">
                                 {title}
                             </Link>
                         </div>

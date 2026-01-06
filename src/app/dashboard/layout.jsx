@@ -9,12 +9,12 @@ import {AppProvider} from "@/context/appContext";
 export default async function DashboardLayout({ children }) {
 
     const user = await getUserFromToken();
-
     if (!user) {
         redirect("auth/login");
     }
 
     const profile = await getProfileForUser(user);
+    console.log(profile);
 
     return (
         <div
@@ -26,6 +26,7 @@ export default async function DashboardLayout({ children }) {
         >
             <AuthProvider user={user}>
                 <AppProvider data={profile}>
+
                     <SideBar />
 
                     <main className="p-6 overflow-x-auto min-w-[450px] transition-all duration-300">

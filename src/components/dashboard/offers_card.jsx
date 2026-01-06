@@ -88,7 +88,7 @@ export default function OfferCard({ offer }) {
                 }
             </div>
 
-            <Link href={`/dashboard/search-offers/${offer_id}`} className="w-full py-2.5 px-4 bg-blue-500/20 text-white text-center text-sm font-semibold rounded group-hover:bg-blue-500/90 transition-colors">
+            <Link href={`/dashboard/student/search-offers/${offer_id}`} className="w-full py-2.5 px-4 bg-blue-500/20 text-white text-center text-sm font-semibold rounded group-hover:bg-blue-500/90 transition-colors">
                 View Details
             </Link>
 

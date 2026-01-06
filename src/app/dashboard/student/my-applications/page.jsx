@@ -3,6 +3,7 @@ import Link from "next/link";
 import {getUserFromToken} from "@/lib/auth";
 import {formatDateShort} from "@/utils/formatDateShort";
 import CancelApplicationButton from "@/components/dashboard/cancelApplicationButton";
+
 export default async function MyApplicationsPage() {
 
     const user = await getUserFromToken();
@@ -99,7 +100,7 @@ export function Row({data}) {
                     </div>
                     <div>
                         <div className="font-semibold text-white">
-                            <Link href={`/dashboard/search-offers/${offer_id}`} className="hover:text-blue-500 hover:underline">
+                            <Link href={`/dashboard/student/search-offers/${offer_id}`} className="hover:text-blue-500 hover:underline">
                                 {title}
                             </Link>
                         </div>
@@ -175,7 +176,7 @@ function Card({data}) {
                     </div>
                     <div>
                         <div className="font-semibold text-white">
-                            <Link href={`/dashboard/search-offers/${offer_id}`} className="hover:text-blue-500 hover:underline">
+                            <Link href={`/dashboard/student/search-offers/${offer_id}`} className="hover:text-blue-500 hover:underline">
                                 {title}
                             </Link>
                         </div>

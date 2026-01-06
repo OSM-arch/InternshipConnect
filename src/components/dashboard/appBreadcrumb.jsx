@@ -16,6 +16,8 @@ export function AppBreadcrumb() {
     const pathname = usePathname();
     const segments = pathname.split("/").filter(Boolean);
 
+    const roles = ["student", "company", "supervisor", "school"];
+
     return (
         <Breadcrumb>
             <BreadcrumbList>
@@ -23,6 +25,8 @@ export function AppBreadcrumb() {
                     segments.map((segment, index) => {
                         const href = "/" + segments.slice(0, index + 1).join("/");
                         const isLast = index === segments.length - 1;
+
+                        if (roles.includes(segment.toLowerCase())) return <React.Fragment key={index}></React.Fragment>
 
                         return <React.Fragment key={index}>
                             <BreadcrumbSeparator />

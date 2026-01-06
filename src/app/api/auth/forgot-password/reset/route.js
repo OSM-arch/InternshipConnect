@@ -8,7 +8,7 @@ export async function POST(req) {
         const { email, newPwd } = await req.json();
 
         const pool = await getDB();
-        const [rows] = await pool.query("SELECT * FROM users WHERE email-verification = ? LIMIT 1", [email]);
+        const [rows] = await pool.query("SELECT * FROM users WHERE email = ? LIMIT 1", [email]);
 
         const user = rows[0];
 
@@ -21,7 +21,7 @@ export async function POST(req) {
         const hashed = await bcrypt.hash(newPwd, 10);
 
         await pool.query(
-            "UPDATE users SET password= ? WHERE email-verification= ?",
+            "UPDATE users SET password= ? WHERE email = ?",
             [hashed, email]
         );
 

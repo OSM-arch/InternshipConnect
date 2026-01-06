@@ -25,18 +25,19 @@ export async function getProfileForUser({ role, user_id }) {
         }
 
         if (role === "company") {
-            const [[row]] = await pool.query(`
-            SELECT 
-                c.company_id,
-                c.company_name,
-                c.address,
-                i.industry_name
-            FROM companies c
-            JOIN industries i ON i.industry_id = c.industry_id
-            WHERE c.user_id = ?
-        `, [user_id]);
+            const [rows] = await pool.query(`
+                SELECT
+                    u.*,
+                    c.*,
+                    i.industry_name,
+                    i.industry_id
+                FROM companies c
+                    JOIN industries i ON i.industry_id = c.industry_id
+                    JOIN users u ON u.user_id = c.user_id
+                WHERE c.user_id = ?
+            `, [user_id]);
 
-            profile = row;
+            profile = rows[0];
         }
 
         if (role === "school") {

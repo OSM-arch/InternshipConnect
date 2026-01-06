@@ -42,6 +42,10 @@ export async function POST(req) {
             const pool = await getDB();
             await pool.query("UPDATE users SET profile_image_url = ? WHERE user_id = ?", [data.publicUrl, id]);
 
+            if (role === "company") {
+                await pool.query("UPDATE companies SET logo_url = ? WHERE user_id = ?", [data.publicUrl, id]);
+            }
+
             return NextResponse.json({success: true});
         }else {
             return NextResponse.json({error: "Can't get image public url"}, {status: 401});

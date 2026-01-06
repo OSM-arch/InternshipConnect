@@ -43,6 +43,8 @@ BEGIN
         i.start_date,
         i.end_date,
         i.internship_status,
+        i.internship_id,
+        i.report_url,
         io.title,
         io.offer_id,
         c.company_name

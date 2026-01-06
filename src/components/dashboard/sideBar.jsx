@@ -6,8 +6,8 @@ import {
     LayoutGrid,
     LayoutDashboard,
     Search,
-    BriefcaseBusiness, Bookmark, MessageSquareText,
-    User
+    BriefcaseBusiness, Bookmark,
+    User, UsersRound
 } from "lucide-react";
 import Link from "next/link";
 import clsx from "clsx";
@@ -26,9 +26,13 @@ export default function SideBar() {
 
     const navigation = {
         student: [
-            {icon: <Search size={20} />, display: "Search Offers", path: "/dashboard/search-offers"},
-            {icon: <BriefcaseBusiness size={20} />, display: "My Applications", path: "/dashboard/my-applications"},
-            {icon: <Bookmark size={20} />, display: "Saved Offers", path: "/dashboard/saved-offers"}
+            {icon: <Search size={20} />, display: "Search Offers", path: "/dashboard/student/search-offers"},
+            {icon: <BriefcaseBusiness size={20} />, display: "My Applications", path: "/dashboard/student/my-applications"},
+            {icon: <Bookmark size={20} />, display: "Saved Offers", path: "/dashboard/student/saved-offers"}
+        ],
+        company: [
+            {icon: <BriefcaseBusiness size={20} />, display: "My Offers", path: "/dashboard/company/my-offers"},
+            {icon: <UsersRound size={20} />, display: "Applications", path: "/dashboard/company/applications"}
         ]
     };
 
@@ -105,7 +109,7 @@ export default function SideBar() {
             <ul className="space-y-2 px-2 pt-2">
                 <li>
                     <Link
-                        href="/dashboard/profile"
+                        href={`/dashboard/${role}/profile`}
                         className="flex items-center gap-3 p-2 text-white rounded-lg hover:bg-gray-700"
                     >
                         <User size={20} />
