@@ -220,7 +220,7 @@ function ManagementCard({data}) {
                         <div className="relative">
                             {end_date && <p className="ml-2 text-sm text-slate-200 font-semibold">{formatDateShort(end_date)}</p>}
                             {!end_date && <input className="w-full bg-slate-800/50 border border-slate-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
-                               type="date" onChange={(e) => updateEndDate(e.target, e.target.value)} />}
+                               type="date" onChange={(e) => updateEndDate(e.target.value)} />}
                         </div>
                     </div>
                 </div>

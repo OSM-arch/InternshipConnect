@@ -19,6 +19,7 @@ export async function GET(req, { params }) {
             SELECT
                 s.cv_url,
                 u.user_id,
+                u.role,
                 u.first_name,
                 u.second_name,
                 u.email,

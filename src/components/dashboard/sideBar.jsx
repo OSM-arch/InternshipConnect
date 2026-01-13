@@ -142,7 +142,7 @@ export default function SideBar() {
                     <div className="bg-green-500 size-8 rounded-full flex items-center justify-center">
                         <LayoutGrid className="text-green-950" />
                     </div>
-                    {!collapsed && <span className="font-semibold">StageConnect</span>}
+                    {!collapsed && <span className="font-semibold">Path2Intern</span>}
                 </div>
             </div>
         </aside>
