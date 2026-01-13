@@ -1,9 +1,10 @@
-import {Plus, SendHorizontal, BadgeCheck, Hourglass} from "lucide-react";
+import {SendHorizontal, BadgeCheck, Hourglass} from "lucide-react";
 import Link from "next/link"
 import {formatDateShort} from "@/utils/formatDateShort";
 import React from "react";
 import {getUserFromToken} from "@/lib/auth";
 import CancelInternshipButton from "@/components/dashboard/cancelInternshipButton";
+import NewOfferButton from "@/components/dashboard/newOfferButton";
 
 export default async function CompanyPage() {
 
@@ -18,6 +19,8 @@ export default async function CompanyPage() {
         console.error(err.message);
     }
 
+    if (!data.data) return (<></>);
+
     const {user, stats, latestInternships} = data.data;
 
     return (
@@ -31,11 +34,7 @@ export default async function CompanyPage() {
                         </p>
                     </div>
                     <div className="flex gap-3">
-                        <Link href="/dashboard/company/post-offer"
-                              className="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg text-sm font-medium transition-colors shadow-md shadow-blue-500/30 flex items-center gap-2">
-                            <Plus size={16} />
-                            Post New Offer
-                        </Link>
+                        <NewOfferButton />
                     </div>
                 </div>
             </div>

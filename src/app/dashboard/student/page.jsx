@@ -19,6 +19,8 @@ export default async function StudentPage() {
         console.error(err.message);
     }
 
+    if (!data.data) return (<></>);
+
     const {user, stats, latestApplications, currentInternship} = data.data;
 
     return (
@@ -102,9 +104,8 @@ export default async function StudentPage() {
                         {
                             currentInternship ? <>
                                 <div className="flex items-center gap-3 mb-6 pb-4 border-b border-gray-500">
-                                    <div className="h-10 w-10 bg-black rounded-lg flex items-center justify-center">
-
-                                        <div className="w-6 h-6 rounded-full bg-[#1DB954]"></div>
+                                    <div className="h-10 w-10 rounded-lg flex items-center justify-center overflow-hidden">
+                                        <img src={currentInternship.logo ? currentInternship.logo : "/vector.png"} alt="company_logo" />
                                     </div>
                                     <div>
                                         <h3 className="text-base font-bold text-white">{currentInternship.company}</h3>
@@ -249,7 +250,7 @@ export function Row({data}) {
             </td>
             <td className="px-6 py-4 text-right">
                 {
-                    status === "accepted" ? <CancelApplicationButton application_id={"."} large={true} /> : <CancelApplicationButton application_id={id} large={true} />
+                    status === "accepted" || status === "rejected" ? <CancelApplicationButton application_id={"."} large={true} /> : <CancelApplicationButton application_id={id} large={true} />
                 }
             </td>
         </tr>

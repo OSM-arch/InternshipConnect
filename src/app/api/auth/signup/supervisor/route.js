@@ -9,21 +9,19 @@ export async function POST(request) {
             lastname,
             email,
             password,
-            school_id,
-            sch_key
+            company_id
         } = await request.json();
         const pool = await getDB();
 
         // Asynchronous password hashing
         const hashed_password = await bcrypt.hash(password, 10);
 
-        await pool.query("CALL register_supervisor (?, ?, ?, ?, ?, ?)", [
+        await pool.query("CALL register_supervisor(?, ?, ?, ?, ?)", [
             firstname,
             lastname,
             email,
             hashed_password,
-            school_id,
-            sch_key
+            company_id
         ]);
 
         return NextResponse.json({

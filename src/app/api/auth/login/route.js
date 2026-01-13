@@ -33,18 +33,6 @@ export async function POST(req) {
             return NextResponse.json({ error: 'Password incorrect' }, { status: 401 });
         }
 
-        // Check if school verified if role = 'school'
-        if (user.role === 'school') {
-            const [schoolRows] = await pool.query('SELECT verified FROM schools WHERE user_id = ?', [user.user_id]);
-
-            if (!schoolRows[0] || !schoolRows[0].verified) {
-                return NextResponse.json(
-                    { error: "Your school account is not yet verified by an admin. Please wait for approval." },
-                    { status: 401 }
-                );
-            }
-        }
-
         // Generate JWT token
         const token = await new SignJWT({
             role: user.role,

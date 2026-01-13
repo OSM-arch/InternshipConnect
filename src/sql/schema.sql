@@ -1,11 +1,10 @@
--- 1. Independent Tables (No Foreign Keys)
 CREATE TABLE users (
     user_id CHAR(36) PRIMARY KEY DEFAULT (UUID()),
     first_name VARCHAR(50) NOT NULL,
     second_name VARCHAR(50) NOT NULL,
     email VARCHAR(100) UNIQUE NOT NULL,
     password VARCHAR(255) NOT NULL,
-    role ENUM('student', 'company', 'supervisor', 'school') NOT NULL,
+    role ENUM('student', 'company', 'supervisor') NOT NULL,
     profile_image_url VARCHAR(255),
     email_verified BOOLEAN DEFAULT FALSE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
@@ -16,15 +15,10 @@ CREATE TABLE industries (
     industry_name VARCHAR(100) UNIQUE NOT NULL
 );
 
--- 2. Tables depending only on 'users'
 CREATE TABLE schools (
     school_id CHAR(36) PRIMARY KEY DEFAULT (UUID()),
-    user_id CHAR(36),
     school_name VARCHAR(150) NOT NULL,
-    registration_key VARCHAR(20) UNIQUE NOT NULL,
-    address TEXT,
-    verified BOOLEAN DEFAULT FALSE,
-    FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE SET NULL
+    address TEXT
 );
 
 CREATE TABLE companies (
@@ -39,46 +33,25 @@ CREATE TABLE companies (
     logo_url VARCHAR(255) NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE ON UPDATE CASCADE,
-	FOREIGN KEY (industry_id) REFERENCES industries(industry_id) ON DELETE SET NULL ON UPDATE CASCADE
+    FOREIGN KEY (industry_id) REFERENCES industries(industry_id) ON DELETE SET NULL ON UPDATE CASCADE
 );
 
 CREATE TABLE supervisors (
     supervisor_id CHAR(36) PRIMARY KEY DEFAULT (UUID()),
-    user_id CHAR(36),
-    school_id CHAR(36),
-    FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE,
-    FOREIGN KEY (school_id) REFERENCES schools(school_id) ON DELETE CASCADE
+    company_id CHAR(36) NOT NULL,
+    user_id CHAR(36) NOT NULL,
+    FOREIGN KEY (company_id) REFERENCES companies(company_id) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
--- 3. Tables depending on 'schools' and 'supervisors'
-CREATE TABLE student_groups (
-    group_id CHAR(36) PRIMARY KEY DEFAULT (UUID()),
-    school_id CHAR(36),
-    supervisor_id CHAR(36),
-    group_name VARCHAR(100) NOT NULL,
-    academic_year VARCHAR(20),
-    FOREIGN KEY (school_id) REFERENCES schools(school_id) ON DELETE CASCADE,
-    FOREIGN KEY (supervisor_id) REFERENCES supervisors(supervisor_id) ON DELETE SET NULL
-);
-
--- 4. Tables depending on 'student_groups' and 'companies'
 CREATE TABLE students (
     student_id CHAR(36) PRIMARY KEY DEFAULT (UUID()),
-    user_id CHAR(36),
-    school_id CHAR(36),
-    group_id CHAR(36),
+    user_id CHAR(36) NOT NULL,
+	school_id CHAR(36) NULL,
     cv_url VARCHAR(255),
-    FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE,
-    FOREIGN KEY (school_id) REFERENCES schools(school_id) ON DELETE CASCADE,
-    FOREIGN KEY (group_id) REFERENCES student_groups(group_id) ON DELETE SET NULL
-);
+    FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE ON UPDATE CASCADE,
+	FOREIGN KEY (school_id) REFERENCES schools(school_id) ON DELETE SET NULL ON UPDATE CASCADE
 
-CREATE TABLE company_industries (
-    company_id CHAR(36),
-    industry_id INT,
-    PRIMARY KEY (company_id, industry_id),
-    FOREIGN KEY (company_id) REFERENCES companies(company_id) ON DELETE CASCADE ON UPDATE CASCADE,
-    FOREIGN KEY (industry_id) REFERENCES industries(industry_id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 CREATE TABLE internship_offers (
@@ -97,7 +70,7 @@ CREATE TABLE internship_offers (
     FOREIGN KEY (company_id) REFERENCES companies(company_id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
--- 5. Transactional Tables (Applications -> Internships)
+
 CREATE TABLE applications (
     application_id CHAR(36) PRIMARY KEY DEFAULT (UUID()),
     student_id CHAR(36) NOT NULL,
@@ -111,24 +84,23 @@ CREATE TABLE applications (
 CREATE TABLE internships (
     internship_id CHAR(36) PRIMARY KEY DEFAULT (UUID()),
     application_id CHAR(36) NOT NULL,
-    supervisor_id CHAR(36) NOT NULL,
+    supervisor_id CHAR(36) DEFAULT NULL,
     start_date DATE NOT NULL,
-    end_date DATE NOT NULL,
+    end_date DATE DEFAULT NULL,
     report_url VARCHAR(255),
     internship_status ENUM('ongoing', 'completed', 'cancelled') DEFAULT 'ongoing',
-    FOREIGN KEY (supervisor_id) REFERENCES supervisors(supervisor_id) ON DELETE CASCADE ON UPDATE CASCADE,
-    FOREIGN KEY (application_id) REFERENCES applications(application_id) ON DELETE CASCADE ON UPDATE CASCADE
+    FOREIGN KEY (application_id) REFERENCES applications(application_id) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (supervisor_id) REFERENCES supervisors(supervisor_id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 CREATE TABLE saved_offers (
-	id INT PRIMARY KEY AUTO_INCREMENT,
+    id INT PRIMARY KEY AUTO_INCREMENT,
     user_id CHAR(36),
     offer_id CHAR(36),
     FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE ON UPDATE CASCADE,
     FOREIGN KEY (offer_id) REFERENCES internship_offers(offer_id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
--- 6. Final Detail Tables
 CREATE TABLE reports (
     report_id CHAR(36) PRIMARY KEY DEFAULT (UUID()),
     internship_id CHAR(36) NOT NULL,
@@ -141,10 +113,11 @@ CREATE TABLE reports (
 CREATE TABLE evaluations (
     evaluation_id CHAR(36) PRIMARY KEY DEFAULT (UUID()),
     internship_id CHAR(36) NOT NULL,
-    report_grade FLOAT NOT NULL,
-    supervisor_grade FLOAT NOT NULL,
+    technical_score FLOAT NOT NULL,
+    soft_skills_score FLOAT NOT NULL,
     final_grade FLOAT NOT NULL,
     feedback TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (internship_id) REFERENCES internships(internship_id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 

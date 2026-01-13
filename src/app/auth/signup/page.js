@@ -8,7 +8,6 @@ import RoleRadio from "@/app/auth/signup/(components)/roleRadio";
 import CompanyForm from "@/app/auth/signup/(components)/(forms)/company";
 import StudentForm from "@/app/auth/signup/(components)/(forms)/student";
 import SupervisorForm from "@/app/auth/signup/(components)/(forms)/supervisor";
-import SchoolForm from "@/app/auth/signup/(components)/(forms)/school";
 
 export default function SignupPage() {
     const [role, setRole] = useState("");
@@ -41,7 +40,6 @@ export default function SignupPage() {
                             {role === "Student" && <StudentForm />}
                             {role === "Company" && <CompanyForm />}
                             {role === "Supervisor" && <SupervisorForm />}
-                            {role === "School" && <SchoolForm />}
                         </div>
                         <div className="flex items-center justify-center gap-2 pt-4">
                             <p className="text-slate-700 dark:text-[#9db9a8] text-sm">Already have an account?</p>
@@ -79,7 +77,7 @@ export function SubmitButton() {
         >
             {pending ? (
                 <>
-                    signing up <Spinner />
+                    Signing <Spinner />
                 </>
             ) : (
                 <>

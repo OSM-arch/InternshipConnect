@@ -202,7 +202,7 @@ export function SubmitButton() {
         >
             {pending ? (
                 <>
-                    signing in <Spinner />
+                    Signing in <Spinner />
                 </>
             ) : (
                 <>

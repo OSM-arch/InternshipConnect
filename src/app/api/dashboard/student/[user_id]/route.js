@@ -45,7 +45,8 @@ export async function GET(req, {params}) {
                     startDate: rows[5][0].start_date,
                     endDate: rows[5][0].end_date,
                     report: rows[5][0].report_url,
-                    status: rows[5][0].internship_status
+                    status: rows[5][0].internship_status,
+                    logo: rows[5][0].logo_url
                 }
                 : null
         };

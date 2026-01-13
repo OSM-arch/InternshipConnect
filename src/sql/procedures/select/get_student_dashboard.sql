@@ -47,12 +47,13 @@ BEGIN
         i.report_url,
         io.title,
         io.offer_id,
-        c.company_name
+        c.company_name,
+        c.logo_url
     FROM internships i
     JOIN applications a ON a.application_id = i.application_id
     JOIN internship_offers io ON io.offer_id = a.offer_id
     JOIN companies c ON c.company_id = io.company_id
-    WHERE a.student_id = p_student_id;
+    WHERE a.student_id = p_student_id AND CURDATE() BETWEEN i.start_date AND i.end_date;
 
     COMMIT;
 END //

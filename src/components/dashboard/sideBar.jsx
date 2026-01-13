@@ -32,8 +32,9 @@ export default function SideBar() {
         ],
         company: [
             {icon: <BriefcaseBusiness size={20} />, display: "My Offers", path: "/dashboard/company/my-offers"},
-            {icon: <UsersRound size={20} />, display: "Applications", path: "/dashboard/company/applications"}
-        ]
+            {icon: <UsersRound size={20} />, display: "Internships", path: "/dashboard/company/internships"}
+        ],
+        supervisor: []
     };
 
     const handleLogout = async () => {

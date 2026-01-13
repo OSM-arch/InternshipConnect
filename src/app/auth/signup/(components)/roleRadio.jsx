@@ -1,6 +1,6 @@
 export default function RoleRadio({ setRole }) {
 
-    const roles = ["Student", "Company", "Supervisor", "School"];
+    const roles = ["Student", "Company", "Supervisor"];
 
     return (
         <div className="mb-4">

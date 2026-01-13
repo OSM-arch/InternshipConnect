@@ -3,8 +3,6 @@ import {AppBreadcrumb} from "@/components/dashboard/appBreadcrumb";
 import {getUserFromToken} from "@/lib/auth";
 import AuthProvider from "@/context/authContext";
 import {redirect} from "next/navigation";
-import {getProfileForUser} from "@/lib/user";
-import {AppProvider} from "@/context/appContext";
 
 export default async function DashboardLayout({ children }) {
 
@@ -12,9 +10,6 @@ export default async function DashboardLayout({ children }) {
     if (!user) {
         redirect("auth/login");
     }
-
-    const profile = await getProfileForUser(user);
-    console.log(profile);
 
     return (
         <div
@@ -25,16 +20,13 @@ export default async function DashboardLayout({ children }) {
             "
         >
             <AuthProvider user={user}>
-                <AppProvider data={profile}>
+                <SideBar />
 
-                    <SideBar />
+                <main className="p-6 overflow-x-auto min-w-[450px] transition-all duration-300">
+                    <AppBreadcrumb />
 
-                    <main className="p-6 overflow-x-auto min-w-[450px] transition-all duration-300">
-                        <AppBreadcrumb />
-
-                        {children}
-                    </main>
-                </AppProvider>
+                    {children}
+                </main>
             </AuthProvider>
         </div>
     );

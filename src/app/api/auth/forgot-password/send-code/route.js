@@ -5,7 +5,7 @@ import nodemailer from "nodemailer";
 
 export async function POST(req) {
     try {
-        const {email, key = null} = await req.json();
+        const {email = null} = await req.json();
 
         const pool = await getDB();
         const [rows] = await pool.query("SELECT * FROM users WHERE email = ? LIMIT 1", [email]);
@@ -15,18 +15,6 @@ export async function POST(req) {
         // User not exists
         if (!user) {
             return NextResponse.json({error: "User not found"}, {status: 401});
-        }
-
-        // SCH-KEY Validation
-        if (key) {
-            const [rows] = await pool.query("SELECT registration_key FROM schools WHERE registration_key = ? LIMIT 1",
-                [key]);
-
-            const registration_key = rows[0];
-
-            if (!registration_key) {
-                return NextResponse.json({error: "SCH-KEY is not valid"}, {status: 401});
-            }
         }
 
         // Generate code
